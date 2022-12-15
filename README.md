@@ -2,7 +2,7 @@
 
 The backend engine of codevideo.io used to generate code videos.
 
-# Run Locally
+## Run Locally
 
 First, ensure you have a `.env` file in the root. You can use the `.env.example` file as a template: 
 
@@ -44,7 +44,7 @@ docker run -d -p $PORT:$PORT codevideo_generator_backend
 
 The container `codevideo_generator_backend` should then be up and running, accessible at `http://localhost:<<PORT>>`, where `<<PORT>>` is the value of the `PORT` environment variable you've set in `.env`. It's up to you to configure further network stuff such as a reverse proxy, SSL, etc. Note the difference here from AWS deployment in that the serverless handler is not the entrypoint of the container, but rather just the `npm start` command.
 
-# Local AWS Deployment
+## Local AWS Deployment
 
 If you want to deploy the AWS docker image locally, you can do so by running the following command:
 
@@ -54,7 +54,9 @@ docker build -t codevideo_generator_backend --build-arg port=$PORT -f deployment
 docker run -d -p $PORT:$PORT codevideo_generator_backend
 ```
 
-# AWS Deployment
+## AWS Deployment
+
+***AWS tooling is more than... elegant. We are hoping to get an AWS lambda deploy working. Until then, see the complete nginx stack deploy section below***
 
 AWS deployment is managed by pulumi within the `deployments` directory. It handles truly everything, from user creation, roles, and so on. To get started, first ensure pulumi is installed:
 
@@ -79,3 +81,11 @@ pulumi up --yes
 ```
 
 If all goes well, you should see pulumi begin to deploy your stack.
+
+## Complete Nginx Stack Deploy
+
+If you want to deploy the entire stack, including nginx, you can do so by running the following command:
+
+```shell
+source .env && docker-compose -f deployments/docker-compose.yml up -d
+```

@@ -32,9 +32,6 @@ services:
   
   certbot:
     container_name: certbot
-    profiles:
-      - staging # run this container in staging environment
-      - production # run this container in production environment
     build:
       context: ./docker-images/certbot
       dockerfile: Dockerfile
