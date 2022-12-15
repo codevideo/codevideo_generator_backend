@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  codevideo_generator:
+    container_name: codevideo_generator
+    build:
+      context: ../
+      dockerfile: Dockerfile.local
+    ports:
+      - "$PORT:$PORT"
+    networks:
+      - codevideo_generator_network
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    volumes:
+      - ./volumes/nginx:/etc/nginx
+      - ./volumes/certbot/conf:/etc/letsencrypt
+      - ./volumes/certbot/www:/var/www/certbot
+    ports:
+        - "80:80"
+        - "443:443"
+    depends_on:
+        - "codevideo_generator"
+    networks:
+      - codevideo_generator_network
+    environment:
+      - DOMAIN
+      - PORT
+    restart: unless-stopped
+  
+  certbot:
+    container_name: certbot
+    profiles:
+      - staging # run this container in staging environment
+      - production # run this container in production environment
+    build:
+      context: ./docker-images/certbot
+      dockerfile: Dockerfile
+    # command must be passed as string, entrypoint is "/bin/sh -c"
+    command: "\"crond -f -l 0\""
+    environment:
+      - DOMAIN
+    restart: unless-stopped
+    volumes:
+      - ./volumes/certbot/conf:/etc/letsencrypt
+      - ./volumes/certbot/www:/var/www/certbot
+
+networks:
+  codevideo_generator_network:
+    name: codevideo_generator_network

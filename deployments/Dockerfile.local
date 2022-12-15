@@ -1,0 +1,35 @@
+# Use Node Alpine
+FROM node:18-alpine
+
+# Install ffmpeg.
+RUN apk add --no-cache ffmpeg
+
+# Custom arg for port (can be overridden)
+ARG port
+ENV PORT=$port
+
+# Create and change to the app directory.
+WORKDIR /usr/src/app
+
+# Install app dependencies.
+# A wildcard is used to ensure both package.json AND package-lock.json are copied.
+# Where available, npm will use the package-lock.json to install the exact versions of the dependencies specified in the package.json file.
+COPY package*.json ./
+
+# Also copy the tsconf.json file
+COPY tsconfig.json ./
+
+# Install NPM dependencies for function
+RUN npm install
+
+# Copy src folder to app directory
+COPY ./src ./src
+
+# Compile the TypeScript source code. (tsc)
+RUN npm run build
+
+# Expose the port present in the PORT environment variable
+EXPOSE $PORT
+
+# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+CMD [ "npm", "start" ]

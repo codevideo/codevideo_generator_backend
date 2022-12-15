@@ -1,0 +1,29 @@
+{
+  "name": "@fullstackcraftllc/codevideo_generator_backend",
+  "version": "1.0.0",
+  "description": "The backend engine of codevideo.io used to generate code videos.",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "npx tsc && node dist/app.js",
+    "build-for-lambda": "npx tsc && mkdir -p function/node_modules && cp -r dist/* function && cp -r node_modules/* function/node_modules && cp .env function && zip -r9 function.zip function"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.15",
+    "@types/multer": "^1.4.7",
+    "@types/node": "^18.11.15",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@vendia/serverless-express": "^4.10.1",
+    "aws-sdk": "^2.1275.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "serverless-http": "^3.1.0"
+  }
+}

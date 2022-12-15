@@ -1,0 +1,45 @@
+# Use official AWS Node.js 18 runtime as a parent image
+FROM public.ecr.aws/lambda/nodejs:18
+
+# Copy in FFMPEG binary
+COPY --from=mwader/static-ffmpeg:5.1.2 /ffmpeg /usr/local/bin/
+
+# # Create and change to the app directory.
+# WORKDIR /usr/src/app
+
+# # Install app dependencies.
+# # A wildcard is used to ensure both package.json AND package-lock.json are copied.
+# # Where available, npm will use the package-lock.json to install the exact versions of the dependencies specified in the package.json file.
+# COPY package*.json ./
+
+# # Also copy the tsconf.json file
+# COPY tsconfig.json ./
+
+# # Install NPM dependencies for function
+# RUN npm install
+
+# # Copy src folder to app directory
+# COPY ./src ./src
+
+# # Compile the TypeScript source code. (tsc)
+# RUN npm run build
+
+# # Copy function code
+# COPY ./dist/lambda.js ${LAMBDA_TASK_ROOT}
+
+# # Copy node_modules
+# COPY ./node_modules ${LAMBDA_TASK_ROOT}/node_modules
+
+# # Copy env file
+# COPY ./.env ${LAMBDA_TASK_ROOT}
+
+# # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+# # CMD [ "lambda.handler" ]
+
+# # zip the contents of LAMBDA_TASK_ROOT with r9 zip - lambda is 'smart' and knows how to unpackage an run this somehow?
+# RUN cd /var/task && zip -r9 function.zip .
+
+# copy zip file in - apparently lambda is 'smart' and knows how to unpackage an run this somehow?
+COPY ./function.zip ${LAMBDA_TASK_ROOT}
+
+CMD [ "lambda.handler" ]
