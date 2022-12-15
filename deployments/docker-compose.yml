@@ -1,15 +1,15 @@
 version: "3.9"
 
 services:
-  codevideo_generator:
-    container_name: codevideo_generator
+  codevideo_generator_backend:
+    container_name: codevideo_generator_backend
     build:
       context: ../
       dockerfile: ./deployments/Dockerfile.local
     ports:
       - "$PORT:$PORT"
     networks:
-      - codevideo_generator_network
+      - codevideo_generator_backend_network
 
   nginx:
     container_name: nginx
@@ -22,9 +22,9 @@ services:
         - "80:80"
         - "443:443"
     depends_on:
-        - "codevideo_generator"
+        - "codevideo_generator_backend"
     networks:
-      - codevideo_generator_network
+      - codevideo_generator_backend_network
     restart: unless-stopped
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   
@@ -38,5 +38,5 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 networks:
-  codevideo_generator_network:
-    name: codevideo_generator_network
+  codevideo_generator_backend_network:
+    name: codevideo_generator_backend_network
