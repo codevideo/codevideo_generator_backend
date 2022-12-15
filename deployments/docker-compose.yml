@@ -5,7 +5,7 @@ services:
     container_name: codevideo_generator
     build:
       context: ../
-      dockerfile: Dockerfile.local
+      dockerfile: ./deployments/Dockerfile.local
     ports:
       - "$PORT:$PORT"
     networks:
