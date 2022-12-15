@@ -89,3 +89,40 @@ If you want to deploy the entire stack, including nginx, you can do so by runnin
 ```shell
 source .env && docker-compose -f deployments/docker-compose.yml up -d
 ```
+
+### Certs for your stack
+
+Note - the certification process assumes you have two domains, one of them having a `staging.` subdomain prefix. If you don't want this pattern, you'll need to modify `nginx/conf.d/api.conf` and `nginx/conf.d/staging.api.conf` to match your domain names.
+
+Move into deployment directory:
+
+```shell
+cd deployments
+```
+
+Download the helper script:
+
+```shell
+curl -L https://raw.githubusercontent.com/wmnnd/nginx-certbot/master/init-letsencrypt.sh > init-letsencrypt.sh
+```
+
+Open the script and edit the following lines:
+
+```shell
+domains=(YOUR_DOMAIN_ONE YOUR_DOMAIN_TWO)
+data_path="./volumes/certbot"
+email="<<YOUR_EMAIL>>" # Adding a valid address is strongly recommended
+staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
+```
+
+Allow execution of the script:
+
+```shell
+chmod +x init-letsencrypt.sh
+```
+
+Run the script:
+
+```shell
+./init-letsencrypt.sh
+```

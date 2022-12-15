@@ -36,6 +36,14 @@ app.use(
   })
 );
 
+// define a single GET route - helper to see if it is really live
+app.get(
+  "/",
+  (req: Request, res: Response) => {
+    res.send("🎥CodeVideo API v.1.0.0🎥\nConvert code snippets to animated video with a single click.\nCode in. Video out. That simple.");
+  }
+)
+
 // define a single POST route
 app.post(
   "/",
