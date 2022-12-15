@@ -31,6 +31,9 @@ COPY ./.env ./
 # Compile the TypeScript source code. (tsc)
 RUN npm run build
 
+# Also ensure 'tmp' folder exists
+RUN mkdir -p tmp
+
 # Expose the port present in the PORT environment variable
 EXPOSE $PORT
 
