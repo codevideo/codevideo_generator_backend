@@ -25,17 +25,12 @@ services:
         - "codevideo_generator"
     networks:
       - codevideo_generator_network
-    environment:
-      - DOMAIN
-      - PORT
     restart: unless-stopped
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   
   certbot:
     container_name: certbot
     image: certbot/certbot
-    environment:
-      - DOMAIN
     restart: unless-stopped
     volumes:
       - ./volumes/certbot/conf:/etc/letsencrypt
