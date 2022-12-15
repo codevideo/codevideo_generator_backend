@@ -25,6 +25,9 @@ RUN npm install
 # Copy src folder to app directory
 COPY ./src ./src
 
+# Copy the .env file
+COPY ./.env ./
+
 # Compile the TypeScript source code. (tsc)
 RUN npm run build
 

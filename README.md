@@ -4,15 +4,21 @@ The backend engine of codevideo.io used to generate code videos.
 
 # Run Locally
 
-First, ensure you have a `.env` file in the `deployments` directory. You can use the `.env.example` file as a template: 
+First, ensure you have a `.env` file in the root. You can use the `.env.example` file as a template: 
 
 ```shell
 cp .env.example .env
 ```
 
-Make sure to define all values there.
+Make sure to define all values there. To save you (and us) headaches, you should also copy the `.env` file to the `deployments` directory:
 
-Install dependencies:
+```shell
+cp .env deployments/.env
+```
+
+(We're working on sourcing everything from the root `.env` file.)
+
+With your env setup, install dependencies:
 
 ```shell
 npm install
@@ -28,7 +34,7 @@ The server should be accessible at `http://localhost:<<PORT>>`, where `<<PORT>>`
 
 # On Premise / Local Docker Deployment
 
-`codevideo_generator_backend` ships as a completely standalone docker image. To build and run it, run the following command:
+`codevideo_generator_backend` also ships as a completely standalone docker image. To build and run it, run the following command:
 
 ```shell
 source .env &&
